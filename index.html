@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Control de Viajes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2c3e50;
+      --success-color: #2ecc71;
+      --danger-color: #e74c3c;
+      --light-color: #ecf0f1;
+      --white-color: #ffffff;
+      --dark-gray: #7b8a8b;
+      --background-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--background-gradient);
+      padding: 20px;
+      color: var(--secondary-color);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: var(--white-color);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--light-color);
+        padding-bottom: 10px;
+    }
+
+    input, select, button {
+      padding: 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      font-size: 1rem;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+        outline: none;
+    }
+
+    .btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+    }
+
+    .btn-danger:hover {
+      background-color: #c0392b;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    }
+    
+    .btn-details {
+        background-color: var(--dark-gray);
+        font-size: 0.8rem;
+        padding: 8px 12px;
+        width: auto;
+        margin-top: 10px;
+    }
+    
+    .btn-details:hover {
+        background-color: var(--secondary-color);
+        box-shadow: none;
+    }
+
+    .resumen-dia {
+      background-color: #f8f9fa;
+      border-left: 6px solid var(--primary-color);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .resumen-dia strong {
+        font-size: 1.2rem;
+    }
+
+    .resumen-total {
+      background-color: #eaf5ff;
+      border-left: 6px solid var(--secondary-color);
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    
+    .resumen-total h3 {
+        color: var(--secondary-color);
+        margin-bottom: 15px;
+    }
+    .resumen-total p {
+        margin-bottom: 8px;
+    }
+    .resumen-total p strong.duenio {
+        font-size: 1.3rem;
+        color: var(--success-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--light-color);
+      font-weight: 600;
+    }
+
+    td strong {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+    
+    tr:nth-child(even) {
+        background-color: #fdfdfd;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .gasto-alerta {
+      color: var(--danger-color);
+      font-weight: 600;
+      font-size: 0.9em;
+      margin-left: 10px;
+      background-color: #fadbd8;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        margin: 20px auto;
+      }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.5rem; }
+      input, select, button { padding: 12px; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-route"></i> Control de Viajes <br> COLQUENCHA &harr; LA PAZ</h1>
+
+    <select id="dia" onchange="cambiarDia()">
+      <option value="">Seleccione un día de la semana</option>
+      <option>Lunes</option>
+      <option>Miércoles</option>
+      <option>Jueves</option>
+      <option>Viernes</option>
+      <option>Sábado</option>
+      <option>Domingo</option>
+    </select>
+
+    <input type="number" id="total" placeholder="Total ganado (Bs)">
+    <input type="number" id="gasto" placeholder="Gasto de gasolina (Bs)">
+
+    <button class="btn" onclick="agregarViaje()"><i class="fas fa-plus-circle"></i> Agregar Viaje</button>
+
+    <h2><i class="fas fa-bus"></i> Viajes del Día</h2>
+    <div id="viajesActuales"></div>
+
+    <h2><i class="fas fa-calendar-alt"></i> Resumen Semanal</h2>
+    <div id="resumenSemanal"></div>
+    
+    <div id="resumenTotal" class="resumen-total hidden"></div>
+
+    <button class="btn btn-danger" onclick="eliminarHistorial()"><i class="fas fa-trash-alt"></i> Eliminar Historial Completo</button>
+  </div>
+
+  <script>
+    let viajesActuales = [];
+    let historialViajes = {};
+    let diaActual = "";
+
+    function guardarHistorial() {
+        localStorage.setItem('historialViajesColquencha', JSON.stringify(historialViajes));
+    }
+
+    function cargarHistorial() {
+        const historialGuardado = localStorage.getItem('historialViajesColquencha');
+        if (historialGuardado) {
+            historialViajes = JSON.parse(historialGuardado);
+        }
+    }
+
+    function cambiarDia() {
+        diaActual = document.getElementById("dia").value;
+        
+        // <-- CAMBIO PRINCIPAL: Cargar los viajes existentes para el día seleccionado
+        if (historialViajes[diaActual]) {
+            viajesActuales = [...historialViajes[diaActual]]; // Carga los viajes del historial
+        } else {
+            viajesActuales = []; // Si no hay, empieza un array vacío
+        }
+        
+        document.getElementById('total').focus();
+        mostrarViajesActuales();
+        mostrarResumenSemanal();
+        mostrarResumenTotal();
+    }
+
+    function agregarViaje() {
+        const totalInput = document.getElementById("total");
+        const gastoInput = document.getElementById("gasto");
+
+        const total = parseFloat(totalInput.value);
+        const gasto = parseFloat(gastoInput.value) || 0;
+        if (!diaActual) return alert("Por favor, seleccione un día.");
+        if (isNaN(total) || total <= 0) return alert("Debe ingresar un total ganado válido.");
+
+        const soloIda = total < 200;
+        const conductor = soloIda ? 25 : 50;
+        const neto = total - gasto;
+        const duenio = neto - conductor;
+
+        viajesActuales.push({ total, gasto, conductor, duenio, neto, soloIda });
+
+        // <-- CAMBIO PRINCIPAL: Guardar inmediatamente después de agregar un viaje
+        historialViajes[diaActual] = viajesActuales; // Actualiza el historial principal
+        guardarHistorial(); // Guarda en la memoria permanente
+
+        totalInput.value = "";
+        gastoInput.value = "";
+        totalInput.focus();
+
+        mostrarViajesActuales();
+        mostrarResumenTotal();
+    }
+
+    function mostrarViajesActuales() {
+      const cont = document.getElementById("viajesActuales");
+      if (viajesActuales.length === 0) {
+        cont.innerHTML = `<p>No hay viajes registrados para el día <strong>${diaActual || ''}</strong>.</p>`;
+        return;
+      }
+
+      let tabla = `<table><tr><th>Total</th><th>Gasto</th><th>Conductor</th><th>Dueño</th><th>Notas</th></tr>`;
+      viajesActuales.forEach(v => {
+        tabla += `<tr>
+          <td><strong>${v.total.toFixed(2)} Bs</strong></td>
+          <td>${v.gasto.toFixed(2)} Bs</td>
+          <td>${v.conductor.toFixed(2)} Bs</td>
+          <td>${v.duenio.toFixed(2)} Bs</td>
+          <td><i class="fas ${v.soloIda ? 'fa-arrow-right' : 'fa-exchange-alt'}"></i> ${v.soloIda ? "Solo ida" : "Viaje completo"}</td>
+        </tr>`;
+      });
+      tabla += `</table>`;
+      cont.innerHTML = tabla;
+    }
+
+    function mostrarResumenSemanal() {
+      const cont = document.getElementById("resumenSemanal");
+      cont.innerHTML = "";
+      
+      const diasOrdenados = ["Lunes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+      const diasDisponibles = diasOrdenados.filter(dia => historialViajes[dia] && historialViajes[dia].length > 0);
+
+      if (diasDisponibles.length === 0) {
+        cont.innerHTML = "<p>Aún no hay días guardados en el historial semanal.</p>";
+        return;
+      }
+      
+      diasDisponibles.forEach(dia => {
+        const viajes = historialViajes[dia];
+        let total = 0, gasto = 0, duenio = 0, conductor = 0;
+        let hayGasto = false;
+        viajes.forEach(v => {
+          total += v.total;
+          gasto += v.gasto;
+          duenio += v.duenio;
+          conductor += v.conductor;
+          if (v.gasto > 0) hayGasto = true;
+        });
+
+        const idDetalle = "detalle_" + dia;
+        cont.innerHTML += `
+          <div class="resumen-dia">
+            <strong>${dia}</strong> ${hayGasto ? '<span class="gasto-alerta"><i class="fas fa-gas-pump"></i> Gasto aplicado</span>' : ''}
+            <br>Total: ${total.toFixed(2)} Bs | Gasto: ${gasto.toFixed(2)} Bs | Conductor: ${conductor.toFixed(2)} Bs | <strong>Dueño: ${duenio.toFixed(2)} Bs</strong>
+            <br><button class="btn btn-details" onclick="mostrarOcultar('${idDetalle}')">Ver detalles</button>
+            <div id="${idDetalle}" class="hidden" style="margin-top: 15px;">
+              <table>
+                <tr><th>Total</th><th>Gasto</th><th>Conductor</th><th>Dueño</th><th>Notas</th></tr>
+                ${viajes.map(v => `
+                  <tr>
+                    <td><strong>${v.total.toFixed(2)} Bs</strong></td>
+                    <td>${v.gasto.toFixed(2)} Bs</td>
+                    <td>${v.conductor.toFixed(2)} Bs</td>
+                    <td>${v.duenio.toFixed(2)} Bs</td>
+                    <td><i class="fas ${v.soloIda ? 'fa-arrow-right' : 'fa-exchange-alt'}"></i> ${v.soloIda ? "Solo ida" : "Viaje completo"}</td>
+                  </tr>`).join("")}
+              </table>
+            </div>
+          </div>
+        `;
+      });
+    }
+    
+    function mostrarResumenTotal() {
+      const cont = document.getElementById("resumenTotal");
+      let totalGeneral = 0, gastoGeneral = 0, duenioGeneral = 0, conductorGeneral = 0;
+      let totalViajes = 0;
+      
+      for (const dia in historialViajes) {
+        historialViajes[dia].forEach(v => {
+          totalGeneral += v.total;
+          gastoGeneral += v.gasto;
+          duenioGeneral += v.duenio;
+          conductorGeneral += v.conductor;
+          totalViajes++;
+        });
+      }
+      
+      if (totalViajes > 0) {
+        cont.innerHTML = `
+          <h3><i class="fas fa-chart-pie"></i> Resumen Total (Todos los días)</h3>
+          <p><strong>Total viajes registrados:</strong> ${totalViajes}</p>
+          <p><strong>Total recaudado:</strong> ${totalGeneral.toFixed(2)} Bs</p>
+          <p><strong>Total gastos (gasolina):</strong> ${gastoGeneral.toFixed(2)} Bs</p>
+          <p><strong>Total pagado al conductor:</strong> ${conductorGeneral.toFixed(2)} Bs</p>
+          <p><strong class="duenio">Ganancia Neta (Dueño): ${duenioGeneral.toFixed(2)} Bs</strong></p>
+        `;
+        cont.classList.remove("hidden");
+      } else {
+        cont.classList.add("hidden");
+      }
+    }
+
+    function mostrarOcultar(id) {
+      const elemento = document.getElementById(id);
+      elemento.classList.toggle("hidden");
+    }
+
+    function eliminarHistorial() {
+      if (confirm("¿Estás seguro de que quieres borrar todo el historial de viajes? Esta acción no se puede deshacer.")) {
+        historialViajes = {};
+        guardarHistorial();
+        
+        viajesActuales = [];
+        cambiarDia(); // Llama a cambiar día para refrescar la vista correctamente
+        
+        alert("Historial eliminado con éxito.");
+      }
+    }
+    
+    document.getElementById('gasto').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            agregarViaje();
+        }
+    });
+
+    window.onload = function() {
+        cargarHistorial();
+        mostrarResumenSemanal();
+        mostrarResumenTotal();
+    };
+    
+  </script>
+</body>
+</html>
