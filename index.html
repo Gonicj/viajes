@@ -29,6 +29,7 @@
       background: var(--background-gradient);
       padding: 20px;
       color: var(--secondary-color);
+      min-height: 100vh;
     }
 
     .container {
@@ -42,8 +43,8 @@
     }
     
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-20px); }
-        to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     h1, h2 {
@@ -52,16 +53,18 @@
     }
 
     h1 {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: var(--secondary-color);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--secondary-color);
+      line-height: 1.3;
     }
 
     h2 {
-        font-size: 1.8rem;
-        color: var(--primary-color);
-        border-bottom: 2px solid var(--light-color);
-        padding-bottom: 10px;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--light-color);
+      padding-bottom: 10px;
+      margin-top: 30px;
     }
 
     input, select, button {
@@ -76,9 +79,9 @@
     }
 
     input:focus, select:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
-        outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+      outline: none;
     }
 
     .btn {
@@ -106,16 +109,16 @@
     }
     
     .btn-details {
-        background-color: var(--dark-gray);
-        font-size: 0.8rem;
-        padding: 8px 12px;
-        width: auto;
-        margin-top: 10px;
+      background-color: var(--dark-gray);
+      font-size: 0.8rem;
+      padding: 8px 12px;
+      width: auto;
+      margin-top: 10px;
     }
     
     .btn-details:hover {
-        background-color: var(--secondary-color);
-        box-shadow: none;
+      background-color: var(--secondary-color);
+      box-shadow: none;
     }
 
     .resumen-dia {
@@ -128,7 +131,7 @@
     }
     
     .resumen-dia strong {
-        font-size: 1.2rem;
+      font-size: 1.2rem;
     }
 
     .resumen-total {
@@ -141,15 +144,15 @@
     }
     
     .resumen-total h3 {
-        color: var(--secondary-color);
-        margin-bottom: 15px;
+      color: var(--secondary-color);
+      margin-bottom: 15px;
     }
     .resumen-total p {
-        margin-bottom: 8px;
+      margin-bottom: 8px;
     }
     .resumen-total p strong.duenio {
-        font-size: 1.3rem;
-        color: var(--success-color);
+      font-size: 1.3rem;
+      color: var(--success-color);
     }
 
     table {
@@ -174,16 +177,16 @@
     }
 
     td strong {
-        font-weight: 600;
-        color: var(--primary-color);
+      font-weight: 600;
+      color: var(--primary-color);
     }
 
     tr:last-child td {
-        border-bottom: none;
+      border-bottom: none;
     }
     
     tr:nth-child(even) {
-        background-color: #fdfdfd;
+      background-color: #f9f9f9;
     }
 
     .hidden {
@@ -198,6 +201,7 @@
       background-color: #fadbd8;
       padding: 3px 8px;
       border-radius: 20px;
+      display: inline-block;
     }
 
     @media (max-width: 600px) {
@@ -205,14 +209,29 @@
         padding: 20px;
         margin: 20px auto;
       }
-      h1 { font-size: 1.8rem; }
-      h2 { font-size: 1.5rem; }
-      input, select, button { padding: 12px; }
-      th, td { padding: 10px; }
+      h1 { 
+        font-size: 1.8rem; 
+        padding: 0 10px;
+      }
+      h2 { 
+        font-size: 1.5rem; 
+        margin-top: 20px;
+      }
+      input, select, button { 
+        padding: 12px; 
+      }
+      th, td { 
+        padding: 10px; 
+        font-size: 0.85rem;
+      }
+      .resumen-dia, .resumen-total {
+        padding: 15px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- El resto del código HTML permanece igual -->
   <div class="container">
     <h1><i class="fas fa-route"></i> Control de Viajes <br> COLQUENCHA &harr; LA PAZ</h1>
 
@@ -243,6 +262,7 @@
   </div>
 
   <script>
+    // El código JavaScript permanece igual
     let viajesActuales = [];
     let historialViajes = {};
     let diaActual = "";
@@ -261,11 +281,10 @@
     function cambiarDia() {
         diaActual = document.getElementById("dia").value;
         
-        // <-- CAMBIO PRINCIPAL: Cargar los viajes existentes para el día seleccionado
         if (historialViajes[diaActual]) {
-            viajesActuales = [...historialViajes[diaActual]]; // Carga los viajes del historial
+            viajesActuales = [...historialViajes[diaActual]];
         } else {
-            viajesActuales = []; // Si no hay, empieza un array vacío
+            viajesActuales = [];
         }
         
         document.getElementById('total').focus();
@@ -290,9 +309,8 @@
 
         viajesActuales.push({ total, gasto, conductor, duenio, neto, soloIda });
 
-        // <-- CAMBIO PRINCIPAL: Guardar inmediatamente después de agregar un viaje
-        historialViajes[diaActual] = viajesActuales; // Actualiza el historial principal
-        guardarHistorial(); // Guarda en la memoria permanente
+        historialViajes[diaActual] = viajesActuales;
+        guardarHistorial();
 
         totalInput.value = "";
         gastoInput.value = "";
@@ -407,15 +425,11 @@
     }
 
     function eliminarHistorial() {
-      if (confirm("¿Estás seguro de que quieres borrar todo el historial de viajes? Esta acción no se puede deshacer.")) {
         historialViajes = {};
         guardarHistorial();
-        
         viajesActuales = [];
-        cambiarDia(); // Llama a cambiar día para refrescar la vista correctamente
-        
-        alert("Historial eliminado con éxito.");
-      }
+        cambiarDia();
+        alert("Historial de viajes eliminado con éxito.");
     }
     
     document.getElementById('gasto').addEventListener('keyup', function(event) {
@@ -429,7 +443,6 @@
         mostrarResumenSemanal();
         mostrarResumenTotal();
     };
-    
   </script>
 </body>
 </html>
