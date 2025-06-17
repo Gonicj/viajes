@@ -204,6 +204,23 @@
       display: inline-block;
     }
 
+    .mensaje-exito {
+      background-color: var(--success-color);
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin: 20px 0;
+      text-align: center;
+      animation: fadeInOut 3s forwards;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateY(-20px); }
+      10% { opacity: 1; transform: translateY(0); }
+      90% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
+
     @media (max-width: 600px) {
       .container {
         padding: 20px;
@@ -231,7 +248,6 @@
   </style>
 </head>
 <body>
-  <!-- El resto del código HTML permanece igual -->
   <div class="container">
     <h1><i class="fas fa-route"></i> Control de Viajes <br> COLQUENCHA &harr; LA PAZ</h1>
 
@@ -262,7 +278,6 @@
   </div>
 
   <script>
-    // El código JavaScript permanece igual
     let viajesActuales = [];
     let historialViajes = {};
     let diaActual = "";
@@ -317,6 +332,7 @@
         totalInput.focus();
 
         mostrarViajesActuales();
+        mostrarResumenSemanal();
         mostrarResumenTotal();
     }
 
@@ -425,11 +441,26 @@
     }
 
     function eliminarHistorial() {
+        // Elimina directamente sin preguntar
         historialViajes = {};
-        guardarHistorial();
         viajesActuales = [];
+        guardarHistorial();
+        
+        // Actualiza la vista
         cambiarDia();
-        alert("Historial de viajes eliminado con éxito.");
+        mostrarResumenSemanal();
+        mostrarResumenTotal();
+        
+        // Muestra mensaje de éxito temporal
+        const mensaje = document.createElement('div');
+        mensaje.className = 'mensaje-exito';
+        mensaje.innerHTML = '<i class="fas fa-check-circle"></i> Historial eliminado con éxito';
+        document.querySelector('.container').insertBefore(mensaje, document.getElementById('viajesActuales'));
+        
+        // Elimina el mensaje después de 3 segundos
+        setTimeout(() => {
+            mensaje.remove();
+        }, 3000);
     }
     
     document.getElementById('gasto').addEventListener('keyup', function(event) {
